@@ -29,8 +29,8 @@ Models developed by Stefanescu-Jirsa, based on reduced-set analyses of infinite 
 
 """
 import numpy
-from scipy.integrate import trapz as scipy_integrate_trapz
-from scipy.stats import norm as scipy_stats_norm
+import scipy.integrate
+import scipy.stats
 from .base import Model
 from tvb.basic.neotraits.api import NArray, Final, List, Range
 
@@ -251,12 +251,12 @@ class ReducedSetFitzHughNagumo(ReducedSetBase):
 
         """
         newaxis = numpy.newaxis
-        trapz = scipy_integrate_trapz
+        trapz = scipy.integrate.trapezoid
 
         stepu = 1.0 / (self.nu + 2 - 1)
         stepv = 1.0 / (self.nv + 2 - 1)
 
-        norm = scipy_stats_norm(loc=self.mu, scale=self.sigma)
+        norm = scipy.stats.norm(loc=self.mu, scale=self.sigma)
 
         Zu = norm.ppf(numpy.arange(stepu, 1.0, stepu))
         Zv = norm.ppf(numpy.arange(stepv, 1.0, stepv))
@@ -552,12 +552,12 @@ class ReducedSetHindmarshRose(ReducedSetBase):
         """
 
         newaxis = numpy.newaxis
-        trapz = scipy_integrate_trapz
+        trapz = scipy.integrate.trapezoid
 
         stepu = 1.0 / (self.nu + 2 - 1)
         stepv = 1.0 / (self.nv + 2 - 1)
 
-        norm = scipy_stats_norm(loc=self.mu, scale=self.sigma)
+        norm = scipy.stats.norm(loc=self.mu, scale=self.sigma)
 
         Iu = norm.ppf(numpy.arange(stepu, 1.0, stepu))
         Iv = norm.ppf(numpy.arange(stepv, 1.0, stepv))
