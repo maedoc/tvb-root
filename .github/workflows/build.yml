@@ -52,10 +52,9 @@ jobs:
         run: |
           cd tvb_kernels
           ./mkispc.sh nodes.ispc
-          python test_nodes.py
           cmake -S . -B build
           cmake --build build
-          PYTHONPATH=build python -c 'import tvb_kernels as vb; help(vb.cx_all_nop)'
+          PYTHONPATH=build python test_nodes.py
 
       # - name: setup tvb
       #   run: |
