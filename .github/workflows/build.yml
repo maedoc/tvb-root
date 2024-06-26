@@ -38,9 +38,12 @@ jobs:
       - name: install compilers and related
         run: |
           pip3 install --user ctypesgen nanobind
-          curl -LO https://github.com/ispc/ispc/releases/download/v1.24.0/ispc-v1.24.0-linux.tar.gz
-          tar xzf ispc-v1.24.0-linux.tar.gz
-          echo "PATH=$PWD/ispc-v1.24.0-linux/bin:$PATH" >> $GITHUB_ENV
+          # curl -LO https://github.com/ispc/ispc/releases/download/v1.24.0/ispc-v1.24.0-linux.tar.gz
+          # tar xzf ispc-v1.24.0-linux.tar.gz
+          # echo "PATH=$PWD/ispc-v1.24.0-linux/bin:$PATH" >> $GITHUB_ENV
+
+      - name: setup ispc
+        uses: ScatteredRay/install-ispc-action@main
 
       - name: check tools work
         run: |
