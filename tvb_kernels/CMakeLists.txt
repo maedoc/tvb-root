@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.15...3.27)
 project(tvb_kernels) # Replace 'my_project' with the name of your project
 
+# so my editor understands c++
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_compile_options(-std=c++17)
+
 if (CMAKE_VERSION VERSION_LESS 3.18)
   set(DEV_MODULE Development)
 else()
@@ -25,4 +29,3 @@ find_package(nanobind CONFIG REQUIRED)
 nanobind_add_module(tvb_kernels tvb_kernels.cpp)
 target_link_libraries(tvb_kernels PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/nodes.ispc.o)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

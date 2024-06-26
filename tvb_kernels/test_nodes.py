@@ -157,6 +157,8 @@ cfun_np = run_sim_np(weights, lengths, zero_mask)
 cx = cfun_np(15)
 
 import time
+import tvb_kernels as vb
+tkc = vb.Connectivity()
 
 fs = [
     lambda i: cfun_np(i),
@@ -164,6 +166,7 @@ fs = [
     lambda i: nodes.cx_all2(p_conn2, i),
     lambda i: nodes.cx_all3(p_conn3, i),
     lambda i: nodes.cx_all_nop(p_conn3, i),
+    lambda i: vb.cx_all_nop(tkc, i)
 ]
 tt = []
 
@@ -180,3 +183,4 @@ nop_pct = tt[4]/tt[1]*100
 print(f'np {tt[0]:0.3f} cj {tt[1]:0.3f}, ci {tt[2]:0.3f} ciT {tt[3]:0.3f}'
       f' x {tt[0]/tt[1]:0.1f}'
       f' ij% {ij_pct:0.2f} ijT%{ijT_pct:0.2f} overhead {nop_pct:0.2f}% ')
+print(f'nop ctypes {tt[4]:0.5f} nanobind {tt[5]:0.5f}')
