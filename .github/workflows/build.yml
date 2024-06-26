@@ -44,6 +44,9 @@ jobs:
 
       - name: setup ispc
         uses: ScatteredRay/install-ispc-action@main
+        with:
+          version: 1.23.0
+          platform: linux
 
       - name: check tools work
         run: |
