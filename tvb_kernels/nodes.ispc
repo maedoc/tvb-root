@@ -127,6 +127,12 @@ export void cx_all3(the_conn &c, uniform int t)
   }
 }
 
+export void cx_all_nop(the_conn &c, uniform int t)
+{
+  // just to test overhead of binding layer
+  return;
+}
+
 void dfun(float &dx, float &dy, float x, float y, float cx, data_floats p)
 {
   float a=p[0], tau=p[1], k=p[2];
