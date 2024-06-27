@@ -3,7 +3,7 @@ project(tvb_kernels) # Replace 'my_project' with the name of your project
 
 # so my editor understands c++
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-add_compile_options(-std=c++17)
+add_compile_options(-std=c++17 -fopenmp-simd)
 
 if (CMAKE_VERSION VERSION_LESS 3.18)
   set(DEV_MODULE Development)
