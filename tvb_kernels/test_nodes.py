@@ -157,45 +157,6 @@ cfun_np = run_sim_np(weights, lengths, zero_mask)
 cx = cfun_np(15)
 
 import time
-import tvb_kernels
-def setup_nb():
-    csc = scipy.sparse.csc_matrix(weights)
-    # since numpy is row major, we need to transpose zero mask then ravel
-    nnz_ravel = np.argwhere(~zero_mask.T.copy().ravel())[:, 0]
-    # then we also need to extract them in the transposed order
-    idelays = (lengths.T.copy().ravel()[nnz_ravel] / dt).astype('i') + 2
-    # then we can test
-    c_buf = buf.copy()
-    c_cx = np.zeros((2, num_node), 'f')
-    p_conn = tvb_kernels.Connectivity(
-        weights=csc.data,
-        indices=csc.indices,
-        indptr=csc.indptr,
-        idelays=idelays,
-        buf=c_buf,
-        cx=c_cx,
-    )
-    return p_conn, c_cx, locals()
-
-def setup_nb_arrays():
-    csc = scipy.sparse.csc_matrix(weights)
-    # since numpy is row major, we need to transpose zero mask then ravel
-    nnz_ravel = np.argwhere(~zero_mask.T.copy().ravel())[:, 0]
-    # then we also need to extract them in the transposed order
-    idelays = (lengths.T.copy().ravel()[nnz_ravel] / dt).astype('i') + 2
-    # then we can test
-    c_buf = buf.copy()
-    c_cx = np.zeros((2, num_node), 'f')
-    return csc.data, csc.indices, csc.indptr, idelays, buf, cx
-
-p_conn_nb, nb_cx, nb_locals = setup_nb()
-tvb_kernels.cx_all(p_conn_nb, 15)
-np.testing.assert_allclose(cx1, nb_cx[0], 2e-6, 1e-6)
-p_conn_nb, nb_cx, nb_locals = setup_nb()
-tvb_kernels.cx_all_cpp(p_conn_nb, 15)
-np.testing.assert_allclose(cx1, nb_cx[0], 2e-6, 1e-6)
-nb_arrays = setup_nb_arrays()
-tvb_kernels.cx_all_arrays(*nb_arrays, 15)
 
 fs = [
     lambda i: cfun_np(i),
@@ -203,10 +164,6 @@ fs = [
     lambda i: nodes.cx_all2(p_conn2, i),
     lambda i: nodes.cx_all3(p_conn3, i),
     lambda i: nodes.cx_all_nop(p_conn3, i),
-    lambda i: tvb_kernels.cx_all_nop(p_conn_nb, i),
-    lambda i: tvb_kernels.cx_all(p_conn_nb, i),
-    lambda i: tvb_kernels.cx_all_cpp(p_conn_nb, i),
-    lambda i: tvb_kernels.cx_all_arrays(*nb_arrays, i)
 ]
 tt = []
 
@@ -220,7 +177,6 @@ for f in fs:
 ij_pct = (tt[1]-tt[2])/tt[2]*100
 ijT_pct = (tt[1]-tt[3])/tt[3]*100
 nop_pct = tt[4]/tt[1]*100
-print(f'np {tt[0]:0.3f} cj {tt[1]:0.3f}, nbcj {tt[6]:0.3f} nb++ {tt[7]:0.3f} nb++a {tt[8]:0.3f} ci {tt[2]:0.3f} ciT {tt[3]:0.3f}'
+print(f'np {tt[0]:0.3f} cj {tt[1]:0.3f}, ci {tt[2]:0.3f} ciT {tt[3]:0.3f}'
       f' x {tt[0]/tt[1]:0.1f}'
       f' ij% {ij_pct:0.2f} ijT%{ijT_pct:0.2f} overhead {nop_pct:0.2f}% ')
-print(f'nop ctypes {tt[4]:0.5f} nanobind {tt[5]:0.5f} x {tt[4]/tt[5]:0.2f}')
