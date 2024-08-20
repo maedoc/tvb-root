@@ -2,9 +2,6 @@
 
 #define uniform
 
-typedef const struct sim *the_sim;
-typedef const struct connectivity the_conn;
-
 void cx_all_j(const struct connectivity *c, int t, int j) {
 
   uniform float *const buf = c->buf + j * c->horizon;
@@ -68,4 +65,10 @@ void cx_all3(const struct connectivity *c, int32_t t) {
     c->cx2[i] = cx2;
   }
 }
-void cx_all_nop(const struct connectivity *c, int32_t t) { return; }
+
+void cx_all_nop(const struct connectivity *c, int32_t t) {
+  (void)c;
+  (void)t;
+
+  return;
+}
