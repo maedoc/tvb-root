@@ -7,7 +7,7 @@ import ctypes as ct
 np.random.seed(43)
 
 num_node = 90
-sparsity = 0.4
+sparsity = 0.3
 
 dt = 0.1
 horizon = 256

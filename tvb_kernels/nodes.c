@@ -33,41 +33,36 @@ void cx_all(const struct connectivity *c, int32_t t) {
 void cx_all2(const struct connectivity *c, int32_t t) {
 
   uniform int th = t + c->horizon;
-  #pragma omp simd
-  for (int i = 0 ; i< c->num_node; i++)
-  {
-    float cx1=0.f, cx2=0.f;
-    for (int l = c->indptr[i]; l < c->indptr[i + 1]; l++)
-    {
+#pragma omp simd
+  for (int i = 0; i < c->num_node; i++) {
+    float cx1 = 0.f, cx2 = 0.f;
+    for (int l = c->indptr[i]; l < c->indptr[i + 1]; l++) {
       int j = c->indices[l];
       float w = c->weights[l];
       int d = c->idelays[l];
       int p1 = (th - d) & c->horizon_minus_1;
       int p2 = (th - d + 1) & c->horizon_minus_1;
-      cx1 += w * c->buf[j*c->horizon + p1];
-      cx2 += w * c->buf[j*c->horizon + p2];
+      cx1 += w * c->buf[j * c->horizon + p1];
+      cx2 += w * c->buf[j * c->horizon + p2];
     }
     c->cx1[i] = cx1;
     c->cx2[i] = cx2;
   }
-  
 }
 void cx_all3(const struct connectivity *c, int32_t t) {
- 
+
   uniform int th = t + c->horizon;
-  #pragma omp simd
-  for(int i = 0; i< c->num_node; i++)
-  {
-    float cx1=0.f, cx2=0.f;
-    for (int l = c->indptr[i]; l < c->indptr[i + 1]; l++)
-    {
+#pragma omp simd
+  for (int i = 0; i < c->num_node; i++) {
+    float cx1 = 0.f, cx2 = 0.f;
+    for (int l = c->indptr[i]; l < c->indptr[i + 1]; l++) {
       int j = c->indices[l];
       float w = c->weights[l];
       int d = c->idelays[l];
       int p1 = (th - d) & c->horizon_minus_1;
       int p2 = (th - d + 1) & c->horizon_minus_1;
-      cx1 += w * c->buf[j + p1*c->num_node];
-      cx2 += w * c->buf[j + p2*c->num_node];
+      cx1 += w * c->buf[j + p1 * c->num_node];
+      cx2 += w * c->buf[j + p2 * c->num_node];
     }
     c->cx1[i] = cx1;
     c->cx2[i] = cx2;

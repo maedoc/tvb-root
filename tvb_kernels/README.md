@@ -19,20 +19,6 @@ steps will convert this to a pure CMake based process.
  
 ## variants
 
-### implementation
-
-ISPC compiler provides the best performance, followed by a C/C++ compiler.
-To handle cases where all compilers are not available, the pattern will
-be as follows
-
-Python class owns kernel workspace (arrays, floats, int) and has a
-short, obvious NumPy based implementation.
-
-A nanobind binding layer optionally implements calls to
-- a short, obvious C++ implementation
-- an (possibly multithreaded) ISPC implementation
-- a CUDA implementation, if arrays are on GPU
-
 ### batch variants
 
 It may be desirable to compute batches of a kernel.
