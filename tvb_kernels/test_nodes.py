@@ -165,18 +165,19 @@ fs = [
     lambda i: nodes.cx_all3(p_conn3, i),
     lambda i: nodes.cx_all_nop(p_conn3, i),
 ]
-tt = []
 
-for f in fs:
-    tik = time.time()
-    for i in range(100_000):
-        f(i)
-    tok = time.time()
-    tt.append(tok - tik)
+for _ in range(3):
+    tt = []
+    for f in fs:
+        tik = time.time()
+        for i in range(100_000):
+            f(i)
+        tok = time.time()
+        tt.append(tok - tik)
 
-ij_pct = (tt[1]-tt[2])/tt[2]*100
-ijT_pct = (tt[1]-tt[3])/tt[3]*100
-nop_pct = tt[4]/tt[1]*100
-print(f'np {tt[0]:0.3f} cj {tt[1]:0.3f}, ci {tt[2]:0.3f} ciT {tt[3]:0.3f}'
-      f' x {tt[0]/tt[1]:0.1f}'
-      f' ij% {ij_pct:0.2f} ijT%{ijT_pct:0.2f} overhead {nop_pct:0.2f}% ')
+    ij_pct = (tt[1]-tt[2])/tt[2]*100
+    ijT_pct = (tt[1]-tt[3])/tt[3]*100
+    nop_pct = tt[4]/tt[1]*100
+    print(f'np {tt[0]:0.3f} cj {tt[1]:0.3f}, ci {tt[2]:0.3f} ciT {tt[3]:0.3f}'
+          f' x {tt[0]/tt[1]:0.1f}'
+          f' ij% {ij_pct:0.2f} ijT%{ijT_pct:0.2f} overhead {nop_pct:0.2f}% ')

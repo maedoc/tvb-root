@@ -1,11 +1,10 @@
-#include "nodes.ispc.h"
+#include "nodes.h"
 
-#define uniform
 
-void cx_all_j(const struct connectivity *c, int t, int j) {
+void cx_all_j(the_conn *c, int t, int j) {
 
-  uniform float *const buf = c->buf + j * c->horizon;
-  uniform int th = t + c->horizon;
+  float *const buf = c->buf + j * c->horizon;
+  int th = t + c->horizon;
 #pragma omp simd
   for (int l = c->indptr[j]; l < c->indptr[j + 1]; l++) {
     int i = c->indices[l];
@@ -18,18 +17,18 @@ void cx_all_j(const struct connectivity *c, int t, int j) {
   }
 }
 
-void cx_all(const struct connectivity *c, int32_t t) {
+void cx_all(the_conn *c, int32_t t) {
 #pragma omp simd
   for (int i = 0; i < c->num_node; i++)
     c->cx1[i] = c->cx2[i] = 0.0f;
 
-  for (uniform int j = 0; j < c->num_node; j++)
+  for (int j = 0; j < c->num_node; j++)
     cx_all_j(c, t, j);
 }
 
-void cx_all2(const struct connectivity *c, int32_t t) {
+void cx_all2(the_conn *c, int32_t t) {
 
-  uniform int th = t + c->horizon;
+  int th = t + c->horizon;
 #pragma omp simd
   for (int i = 0; i < c->num_node; i++) {
     float cx1 = 0.f, cx2 = 0.f;
@@ -46,9 +45,9 @@ void cx_all2(const struct connectivity *c, int32_t t) {
     c->cx2[i] = cx2;
   }
 }
-void cx_all3(const struct connectivity *c, int32_t t) {
+void cx_all3(the_conn *c, int32_t t) {
 
-  uniform int th = t + c->horizon;
+  int th = t + c->horizon;
 #pragma omp simd
   for (int i = 0; i < c->num_node; i++) {
     float cx1 = 0.f, cx2 = 0.f;
