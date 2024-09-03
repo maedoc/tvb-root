@@ -19,9 +19,14 @@ jobs:
           color: true
           path: spack
 
+      - name: debug
+        run: |
+          ls -lh
+
       - name: install deps w/ spack
         shell: spack-bash {0}
         run: |
+          spack env create env spack.yaml
           spack -e . concretize
           spack -e . install
           spack env activate .
