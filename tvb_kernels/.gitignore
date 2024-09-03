@@ -4,3 +4,4 @@ build
 build
 .spack-env
 spack.lock
+*.whl
