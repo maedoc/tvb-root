@@ -19,14 +19,10 @@ jobs:
           color: true
           path: spack
 
-      - name: debug
-        run: |
-          ls -lh
-
       - name: install deps w/ spack
         shell: spack-bash {0}
         run: |
-          spack env create env spack.yaml
+          cd tvb_kernels
           spack -e . concretize
           spack -e . install
           spack env activate .
@@ -35,6 +31,7 @@ jobs:
       - name: build nanobound library
         shell: spack-bash {0}
         run: |
+          cd tvb_kernels
           spack env activate .
           cmake -S . -B build
           pushd build
@@ -44,12 +41,14 @@ jobs:
       - name: run tests
         shell: spack-bash {0}
         run: |
+          cd tvb_kernels
           spack env activate .
           PYTHONPATH=build pytest
 
       # https://github.com/spack/setup-spack?tab=readme-ov-file#example-caching-your-own-binaries-for-public-repositories
       - name: Push packages and update index
         run: |
+          cd tvb_kernels
           spack -e . mirror set --push --oci-username ${{ github.actor }} --oci-password "${{ secrets.GITHUB_TOKEN }}" local-buildcache
           spack -e . buildcache push --base-image ubuntu:22.04 --update-index local-buildcache
         if: ${{ !cancelled() }}
