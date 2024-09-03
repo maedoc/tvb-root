@@ -4,7 +4,7 @@ import numpy as np
 import scipy.sparse
 import enum
 
-import tvb_kernels
+from tvb_kernels import tvb_kernels
 
 
 class CxMode(enum.Enum):

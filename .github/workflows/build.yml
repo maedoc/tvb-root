@@ -27,23 +27,14 @@ jobs:
           spack -e . install
           spack env activate .
           spack env status
-          
+          pip install pytest
+
       - name: build nanobound library
         shell: spack-bash {0}
         run: |
           cd tvb_kernels
-          spack env activate .
-          cmake -S . -B build
-          pushd build
-          make -j2
-          popd
-
-      - name: run tests
-        shell: spack-bash {0}
-        run: |
-          cd tvb_kernels
-          spack env activate .
-          PYTHONPATH=build pytest
+          pip install .
+          pytest
 
       # https://github.com/spack/setup-spack?tab=readme-ov-file#example-caching-your-own-binaries-for-public-repositories
       - name: Push packages and update index
