@@ -22,7 +22,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: install tools and dependencies
-        run: python3 -m pip install -U setuptools pip wheel pytest
+        run: python3 -m pip install -U setuptools pip wheel pytest scipy
 
       - name: build
         run: cd tvb_kernels; pip install .
