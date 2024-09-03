@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.10", "3.11" ]
+        python-version: [ "3.10", ]
 
     steps:
 
@@ -22,7 +22,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: install tools and dependencies
-        run: python3 -m pip install -U setuptools pip wheel pytest typing_extensions
+        run: python3 -m pip install -U setuptools pip wheel pytest
 
       - name: build
         run: cd tvb_kernels; pip install .
@@ -55,7 +55,7 @@ jobs:
           spack -e . install
           spack env activate .
           spack env status
-          pip install pytest typing_extensions
+          pip install pytest
 
       - name: build nanobound library
         shell: spack-bash {0}
